@@ -3,6 +3,7 @@ package co.sen.bankingapi.api.user.web;
 
 import co.sen.bankingapi.api.user.UserService;
 import co.sen.bankingapi.base.BaseRest;
+import com.github.pagehelper.PageInfo;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +19,19 @@ import java.time.LocalDateTime;
 @RequestMapping("/api/v1/users")
 public class UserRestController {
     private final UserService userService;
+
+    @GetMapping
+    public BaseRest<?> findAllUsers(@RequestParam(name = "page" , required = false, defaultValue = "1") int page,
+                                    @RequestParam(name = "limit" , required = false , defaultValue = "20")int limit) {
+        PageInfo<UserDto> userDtoPageInfo = userService.findAllUsers(page, limit);
+        return BaseRest.builder()
+                .status(true)
+                .code(HttpStatus.OK.value())
+                .message("User have been created successfully")
+                .timestamp(LocalDateTime.now())
+                .data(userDtoPageInfo)
+                .build();
+    }
 
     @PutMapping("/{id}")
     public BaseRest<?> updateIsDeletedStatusById(@PathVariable Integer id, @RequestBody IsDeletedDto dto){

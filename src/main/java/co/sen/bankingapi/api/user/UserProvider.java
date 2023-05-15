@@ -38,6 +38,13 @@ public class UserProvider {
             WHERE("id = #{id}");
         }}.toString();
     }
+    public  String buildSelectSql(){
+        return new SQL() {{
+            SELECT("*");
+            FROM("users");
+            WHERE("is_deleted = FALSE");
+        }}.toString();
+    }
 }
 
 
